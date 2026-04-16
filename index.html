@@ -1,1 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Games · For My Jaan 🎮</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .floating-heart {
+            position: fixed;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatHeart 4s ease-in forwards;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .game-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .cell:hover {
+            transform: scale(1.05);
+        }
+
+        .love-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .fortune-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .next-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255,107,107,0.4);
+        }
+
+        @media (max-width: 768px) {
+            .games-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>🎮 My Jaan, Let's Play! 🎮</h1>
+        <p>Pehle games khelte hain, fir main kuch poochunga tujhse 💕</p>
+    </div>
+
+    <div class="games-grid">
+        <div class="game-card" onclick="openTicTacToe()">
+            <div class="game-icon">❌⭕</div>
+            <h3>Tic Tac Toe</h3>
+            <p>Jeetne wale ko surprise! 🎁</p>
+            <button class="play-btn">Play Now →</button>
+        </div>
+
+        <div class="game-card" onclick="openLoveCalculator()">
+            <div class="game-icon">💝</div>
+            <h3>Love Calculator</h3>
+            <p>Dekhte hain kitna % match hai humara 💕</p>
+            <button class="play-btn">Calculate →</button>
+        </div>
+
+        <div class="game-card" onclick="openFortuneTeller()">
+            <div class="game-icon">🔮</div>
+            <h3>Fortune Teller</h3>
+            <p>Kya kehti hai kismat humari? ✨</p>
+            <button class="play-btn">Tell Fortune →</button>
+        </div>
+    </div>
+
+    <div class="next-section">
+        <button class="next-btn" onclick="goToProposal()">
+            ✨ Ab Aage Badhte Hain ✨
+            <br>
+            <small style="font-size: 0.8rem;">Mera question sunna...</small>
+        </button>
+    </div>
+</div>
+
+<!-- Tic Tac Toe Modal -->
+<div id="ticTacToeModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('ticTacToeModal')">&times;</span>
+        <h2>🎮 Tic Tac Toe 🎮</h2>
+        <div class="board" id="board"></div>
+        <div id="gameStatus" style="margin: 20px 0; font-size: 1.2rem;"></div>
+        <button class="play-btn" onclick="resetGame()">New Game</button>
+    </div>
+</div>
+
+<!-- Love Calculator Modal -->
+<div id="loveCalculatorModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('loveCalculatorModal')">&times;</span>
+        <h2>💕 Love Calculator 💕</h2>
+        <input type="text" id="yourName" class="love-input" placeholder="Tumhara Naam">
+        <input type="text" id="partnerName" class="love-input" placeholder="Mera Naam">
+        <button class="play-btn" onclick="calculateLove()">Calculate Love ❤️</button>
+        <div id="loveResult" style="margin-top: 20px; font-size: 1.2rem; font-weight: bold;"></div>
+    </div>
+</div>
+
+<!-- Fortune Teller Modal -->
+<div id="fortuneModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('fortuneModal')">&times;</span>
+        <h2>🔮 Fortune Teller 🔮</h2>
+        <button class="fortune-btn" onclick="tellFortune()">Reveal Our Destiny</button>
+        <div id="fortuneResult" style="margin-top: 20px; font-size: 1.2rem;"></div>
+    </div>
+</div>
+
+<script>
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerHTML = ['❤️', '💕', '💖', '💗', '💓'][Math.floor(Math.random() * 5)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+    }
+    setInterval(createHeart, 800);
+
+    // Tic Tac Toe
+    let board = Array(9).fill(null);
+    let currentPlayer = 'X';
+    let gameActive = true;
+
+    function openTicTacToe() {
+        resetGame();
+        document.getElementById('ticTacToeModal').style.display = 'flex';
+    }
+
+    function createBoard() {
+        const boardElement = document.getElementById('board');
+        boardElement.innerHTML = '';
+        for(let i = 0; i < 9; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.onclick = () => makeMove(i);
+            cell.textContent = board[i];
+            boardElement.appendChild(cell);
+        }
+    }
+
+    function makeMove(index) {
+        if(!gameActive || board[index]) return;
+        
+        board[index] = currentPlayer;
+        createBoard();
+        
+        if(checkWinner()) {
+            document.getElementById('gameStatus').innerHTML = `${currentPlayer} wins! 🎉 ${currentPlayer === 'X' ? 'Tum jeet gayi! Surprise waiting! 💕' : 'Main jeet gaya! Hug do! 🤗'}`;
+            gameActive = false;
+            createHeart();
+            return;
+        }
+        
+        if(board.every(cell => cell)) {
+            document.getElementById('gameStatus').innerHTML = "Tie ho gaye! Hum perfect match hain 💑";
+            gameActive = false;
+            return;
+        }
+        
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        document.getElementById('gameStatus').innerHTML = `${currentPlayer}'s turn`;
+    }
+
+    function checkWinner() {
+        const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+        return winPatterns.some(pattern => {
+            const [a,b,c] = pattern;
+            return board[a] && board[a] === board[b] && board[a] === board[c];
+        });
+    }
+
+    function resetGame() {
+        board = Array(9).fill(null);
+        currentPlayer = 'X';
+        gameActive = true;
+        document.getElementById('gameStatus').innerHTML = "X's turn";
+        createBoard();
+    }
+
+    // Love Calculator
+    function openLoveCalculator() {
+        document.getElementById('loveCalculatorModal').style.display = 'flex';
+    }
+
+    function calculateLove() {
+        const yourName = document.getElementById('yourName').value;
+        const partnerName = document.getElementById('partnerName').value;
+        
+        if(!yourName || !partnerName) {
+            alert("Dono naam daal de please! 💕");
+            return;
+        }
+        
+        const lovePercentage = 100;
+        document.getElementById('loveResult').innerHTML = `
+            ${yourName} ❤️ ${partnerName}<br>
+            Love Percentage: ${lovePercentage}%<br>
+            💖 Perfect Match! Hum banaye gaye ek dusre ke liye! 💖
+        `;
+        for(let i = 0; i < 5; i++) setTimeout(() => createHeart(), i * 200);
+    }
+
+    // Fortune Teller
+    const fortunes = [
+        "✨ Kal kuch special hone wala hai tum dono ke beech! ✨",
+        "💫 Tumhari kismat mein ek beautiful date likhi hai! 💫",
+        "🌟 Agla page tumhara dil jeet lega! 🌟",
+        "💝 Tum dono ki story magical hai! 💝",
+        "🌸 Aage kuch pyara sa surprise hai! 🌸"
+    ];
+
+    function openFortuneTeller() {
+        document.getElementById('fortuneModal').style.display = 'flex';
+    }
+
+    function tellFortune() {
+        const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+        document.getElementById('fortuneResult').innerHTML = randomFortune;
+        createHeart();
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    function goToProposal() {
+        window.location.href = 'proposal.html';
+    }
+
+    window.onclick = function(event) {
+        if(event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+
+    resetGame();
+</script>
+</body>
+</html>
